@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulación de Generación de Cuenta</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: Arial, sans-serif;
+            background-image: url('https://i.pinimg.com/564x/59/e6/f8/59e6f8041347a8ba21da8bfb2014f104.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .menu-superior {
+            width: 100%;
+            background-color: rgba(0, 0, 0, 0.7); /* Fondo negro semi-transparente */
+            padding: 10px 0;
+            position: fixed;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px; /* Espacio entre los elementos del menú */
+        }
+
+        .menu-superior img {
+            max-width: 100%;  /* La imagen no excederá el ancho del contenedor */
+            height: auto;     /* Mantiene la proporción de la imagen */
+        }
+
+        .menu-superior .idiomas {
+            position: absolute;
+            right: 20px;
+        }
+
+        .idioma-boton {
+            background-color: white;
+            color: black;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+            margin-left: 5px;
+        }
+
+        .titulo {
+            font-size: 60px;
+            font-weight: bold;
+            color: white;
+            text-shadow: 2px 2px 4px black; /* Texto blanco con sombra negra */
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .boton-generar {
+            background-color: gold;
+            color: black;
+            padding: 15px 30px;
+            font-size: 38px;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            transition: background-color 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            text-decoration: none; /* Eliminar el subrayado del texto */
+        }
+
+        .boton-generar:hover {
+            background-color: darkgoldenrod;
+        }
+
+        .resultado {
+            margin-top: 20px;
+            font-size: 35px;
+            color: white;
+            text-align: center;
+        }
+
+        .slider {
+            width: 80%;
+            height: 20px;
+            margin-top: 20px;
+            background-color: #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            display: none; /* Oculto por defecto */
+        }
+
+        .slider-barra {
+            height: 100%;
+            width: 0;
+            background-color: gold;
+        }
+
+        .boton-compartir {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            text-decoration: none; /* Eliminar el subrayado del texto */
+        }
+
+        .boton-compartir img {
+            margin-right: 10px; /* Espacio entre el logo y el texto */
+            width: 24px;
+            height: 24px;
+        }
+
+        .politica-privacidad {
+            position: fixed;
+            bottom: 40px;
+            text-align: center;
+            width: 100%;
+            color: white;
+        }
+
+        .politica-privacidad a {
+            color: #00BFFF;
+            text-decoration: none;
+        }
+
+        .politica-privacidad a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="menu-superior">
+        <img src="https://www.appcreator24.com/srv/imgs/cards/o3185135_15992968.png?v=2" alt="Título">
+        <div class="idiomas">
+            <button class="idioma-boton" onclick="cambiarIdioma('es')">ES</button>
+            <button class="idioma-boton" onclick="cambiarIdioma('en')">EN</button>
+        </div>
+    </div>
+
+    <div class="titulo" id="titulo">
+        💎Generador de cuentas de FREEFIRE gratis 📲
+    </div>
+
+    <!-- Enlace para el botón Generar Cuenta -->
+    <a href="https://theertoow.net/4/6931348" class="boton-generar" target="_blank" id="boton-generar" onclick="iniciarGeneracion()">
+        Generar Cuenta
+    </a>
+
+    <div class="slider" id="slider">
+        <div class="slider-barra" id="slider-barra"></div>
+    </div>
+
+    <div class="resultado" id="resultado"></div>
+
+    <!-- Botón de Compartir -->
+    <a href="javascript:void(0);" class="boton-compartir">
+        <img src="ruta/de/tu/logo-compartir.png" alt="Compartir">
+        Compartir
+    </a>
+
+    <!-- Texto de Política de Privacidad -->
+    <div class="politica-privacidad">
+        <a href="https://example.com/politica-privacidad" id="politica-privacidad">Política de privacidad</a>
+    </div>
+
+    <script>
+        const textos = {
+            es: {
+                titulo: "💎Generador de cuentas de FREEFIRE gratis 📲",
+                botonGenerar: "Generar Cuenta",
+                politicaPrivacidad: "Política de privacidad",
+                generando: "Generando...",
+                generarOtra: "Generar otra cuenta 👈"
+            },
+            en: {
+                titulo: "💎FREEFIRE Account Generator Free 📲",
+                botonGenerar: "Generate Account",
+                politicaPrivacidad: "Privacy Policy",
+                generando: "Generating...",
+                generarOtra: "Generate Another Account 👈"
+            }
+        };
+
+        function cambiarIdioma(idioma) {
+            document.getElementById('titulo').innerText = textos[idioma].titulo;
+            document.getElementById('boton-generar').innerText = textos[idioma].botonGenerar;
+            document.getElementById('politica-privacidad').innerText = textos[idioma].politicaPrivacidad;
+            document.getElementById('boton-generar').setAttribute('href', idioma === 'es' ? 'https://example.com' : 'https://example.com'); // Cambiar la URL si es necesario
+        }
+
+        function iniciarGeneracion() {
+            // Si ya se ha generado una cuenta, limpiamos el resultado y cambiamos el texto del botón
+            document.getElementById('resultado').innerHTML = '';
+            document.getElementById('boton-generar').innerText = textos[document.documentElement.lang || 'es'].generando;
+
+            document.getElementById('slider').style.display = 'block';
+            let barra = document.getElementById('slider-barra');
+            let ancho = 0;
+
+            let intervalo = setInterval(function() {
+                if (ancho >= 100) {
+                    clearInterval(intervalo);
+                    generarCuenta();
+                } else {
+                    ancho++;
+                    barra.style.width = ancho + '%';
+                }
+            }, 30); // Velocidad de carga del slider
+        }
+
+        function generarCuenta() {
+            const caracteres = 'abcdefghijklmnopqrstuvwxyz0123456789';
+            let nombreUsuario = '';
+            let contrasena = '';
+
+            for (let i = 0; i < 10; i++) {
+                nombreUsuario += caracteres.charAt(Math.floor(Math.random() * caracteres.length));
+            }
+
+            for (let i = 0; i < 8; i++) { // Genera una contraseña de 8 caracteres al azar
+                contrasena += caracteres.charAt(Math.floor(Math.random() * caracteres.length));
+            }
+
+            const correo = nombreUsuario + '@gmail.com';
+
+            document.getElementById('resultado').innerHTML = correo + ' > ' + contrasena;
+            document.getElementById('slider').style.display = 'none'; // Ocultar el slider después de la carga
+            document.getElementById('boton-generar').innerText = textos[document.documentElement.lang || 'es'].generarOtra; // Cambiar el texto del botón
+        }
+    </script>
+
+</body>
+</html>
